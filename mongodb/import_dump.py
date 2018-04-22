@@ -51,7 +51,8 @@ if __name__ == '__main__':
     parser.add_argument('db_name', help='Database name')
     parser.add_argument('collection_name', help='Collection name')
     parser.add_argument('--chunk_size', '-c', default=10000,
-                        help='Chunk size (default=10000)')
+                        help='Chunk size (default=10000, ' \
+                        'RAM usage depends on chunk size)')
     parser.add_argument('--nworker', '-n', default=1,
                         help='Number of workers (default=1)')
     args = parser.parse_args()
