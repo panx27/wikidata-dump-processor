@@ -15,9 +15,8 @@ logging.basicConfig(format='%(asctime)s: %(levelname)s: %(message)s')
 logging.root.setLevel(level=logging.INFO)
 
 
-def process(lines):
+def process(lines, verbose=False):
     try:
-        verbose = False
         if verbose:
             pid = os.getpid()
             logger.info('%s started' % pid)
@@ -47,7 +46,8 @@ def process(lines):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('pconf', help='Path to config file')
-    parser.add_argument('inpath', help='ath to inpath file (x-all.json.bz2)')
+    parser.add_argument('inpath',
+                        help='Path to inpath file (xxxxxxxx-all.json.bz2)')
     parser.add_argument('db_name', help='Database name')
     parser.add_argument('collection_name', help='Collection name')
     parser.add_argument('--chunk_size', '-c', default=10000,
@@ -61,7 +61,7 @@ if __name__ == '__main__':
     config.read(config_path)
     host = config.get('mongodb', 'host')
     port = config.getint('mongodb', 'port')
-    pdata = args.inpath # /nas/data/m1/panx2/data/KBs/dump/wikidata/20180412/20180412-all.json.bz2
+    pdata = args.inpath
     db_name = args.db_name
     collection_name = args.collection_name
     nworker = int(args.nworker)
