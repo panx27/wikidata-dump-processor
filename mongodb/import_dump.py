@@ -24,14 +24,14 @@ def process(lines, verbose=False):
         collection = client[db_name][collection_name]
         data = []
         for line in lines:
-            line = line.decode('utf-8').rstrip('\n')
+            line = line.decode('utf-8').rstrip(',\n')
             if line == '[' or line == ']':
                 continue
-            if line[-1] == ',':
-                line = line[:-1]
             d = json.loads(line)
             data.append(d)
-        collection.insert(data)
+        collection.insert(data) # batch insert is much faster than insert_one
+                                # but it causes larger RAM usage
+                                # reduce --chunk_size
         client.close()
         if verbose:
             logger.info('%s finished' % pid)
@@ -87,10 +87,17 @@ if __name__ == '__main__':
 
     logger.info('indexing...')
     collection = client[db_name][collection_name]
+    # id
     collection.create_index('id', unique=True)
+    # sitelinks.enwiki.title
     collection.create_index('sitelinks.enwiki.title', sparse=True)
-    k = [('sitelinks.enwiki.title', 1), ('id', 1)]
+    # { sitelinks.enwiki.title: 1, id: 1 }
+    key = [('sitelinks.enwiki.title', 1), ('id', 1)]
     pfe = {'sitelinks.enwiki.title': {'$exists': True}}
-    collection.create_index(k, partialFilterExpression=pfe)
+    collection.create_index(key, partialFilterExpression=pfe)
+    # { id: 1, labels.en.value: 1 }
+    key = [('labels.en.value', 1), ('id', 1)]
+    pfe = {'labels.en.value': {'$exists': True}}
+    collection.create_index(key, partialFilterExpression=pfe)
 
     logger.info('done.')
