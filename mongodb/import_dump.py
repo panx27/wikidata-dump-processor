@@ -29,9 +29,10 @@ def process(lines, verbose=False):
                 continue
             d = json.loads(line)
             data.append(d)
-        collection.insert(data) # batch insert is much faster than insert_one
-                                # but it causes larger RAM usage
-                                # reduce --chunk_size
+        if data:
+            collection.insert(data) # batch insert is much faster than
+                                    # insert_one, but it causes larger RAM usage
+                                    # reduce --chunk_size if necessary
         client.close()
         if verbose:
             logger.info('%s finished' % pid)
@@ -80,24 +81,9 @@ if __name__ == '__main__':
     logger.info('chunk size: %s' % chunk_size)
     logger.info('parent pid: %s' % os.getpid())
     with bz2.BZ2File(pdata) as f:
-        for n_lines in iter(lambda: tuple(islice(f, chunk_size)), ()):
-            pool.apply_async(process, args=(n_lines,),)
+        for chunk in iter(lambda: tuple(islice(f, chunk_size)), ()):
+            pool.apply_async(process, args=(chunk,),)
     pool.close()
     pool.join()
-
-    logger.info('indexing...')
-    collection = client[db_name][collection_name]
-    # id
-    collection.create_index('id', unique=True)
-    # sitelinks.enwiki.title
-    collection.create_index('sitelinks.enwiki.title', sparse=True)
-    # { sitelinks.enwiki.title: 1, id: 1 }
-    key = [('sitelinks.enwiki.title', 1), ('id', 1)]
-    pfe = {'sitelinks.enwiki.title': {'$exists': True}}
-    collection.create_index(key, partialFilterExpression=pfe)
-    # { id: 1, labels.en.value: 1 }
-    key = [('labels.en.value', 1), ('id', 1)]
-    pfe = {'labels.en.value': {'$exists': True}}
-    collection.create_index(key, partialFilterExpression=pfe)
 
     logger.info('done.')
