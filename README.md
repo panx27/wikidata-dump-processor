@@ -1,7 +1,7 @@
 # wikidata-dump-processor
 import Wikidata json dump (.json.bz2) into Mongodb
 
-- Index fields: `id`, `sitelinks.enwiki.title`
+- Index fields: `{ id: 1 }`, `{ sitelinks.enwiki.title: 1 }`
 
 - [Partial Index](https://docs.mongodb.com/manual/core/index-partial/) for [Covered Query](https://docs.mongodb.com/manual/core/query-optimization/#covered-query): `{ sitelinks.enwiki.title: 1, id: 1 }`
 
