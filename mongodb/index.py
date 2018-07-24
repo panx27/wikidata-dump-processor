@@ -33,32 +33,39 @@ if __name__ == '__main__':
     # { id: 1 }
     logger.info('index key: { id: 1 }')
     collection.create_index('id', unique=True)
-    logger.info('done.')
 
     # { sitelinks.enwiki.title: 1 }
     logger.info('index key: { sitelinks.enwiki.title : 1 }')
     key = [('sitelinks.enwiki.title', 1)]
     pfe = {'sitelinks.enwiki.title': {'$exists': True}}
     collection.create_index(key, partialFilterExpression=pfe)
-    logger.info('done.')
 
     # { sitelinks.enwiki.title: 1, id: 1 }
     logger.info('index key: { sitelinks.enwiki.title: 1, id: 1 }')
     key = [('sitelinks.enwiki.title', 1), ('id', 1)]
     pfe = {'sitelinks.enwiki.title': {'$exists': True}}
     collection.create_index(key, partialFilterExpression=pfe)
-    logger.info('done.')
 
     # { labels.en.value: 1, id: 1 }
     logger.info('index key: { labels.en.value: 1, id: 1 }')
     key = [('labels.en.value', 1), ('id', 1)]
     pfe = {'labels.en.value': {'$exists': True}}
     collection.create_index(key, partialFilterExpression=pfe)
-    logger.info('done.')
 
     # { claims.P279.mainsnak.datavalue.value.id: 1 }
     logger.info('index key: { claims.P279.mainsnak.datavalue.value.id: 1 }')
     key = [('claims.P279.mainsnak.datavalue.value.id', 1)]
     pfe = {'claims.P279.mainsnak.datavalue.value.id': {'$exists': True}}
     collection.create_index(key, partialFilterExpression=pfe)
-    logger.info('done.')
+
+    # { claims.P31.mainsnak.datavalue.value.id: 1 }
+    logger.info('index key: { claims.P31.mainsnak.datavalue.value.id: 1 }')
+    key = [('claims.P31.mainsnak.datavalue.value.id', 1)]
+    pfe = { 'claims.P31.mainsnak.datavalue.value.id': {'$exists': True}}
+    collection.create_index(key, partialFilterExpression=pfe)
+
+    # { claims.P646.mainsnak.datavalue.value: 1 }
+    logger.info('index key: { claims.P646.mainsnak.datavalue.value: 1 }')
+    key = [('claims.P646.mainsnak.datavalue.value', 1)]
+    pfe = {'claims.P646.mainsnak.datavalue.value': {'$exists': True}}
+    collection.create_index(key, partialFilterExpression=pfe)
