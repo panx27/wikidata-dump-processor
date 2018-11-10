@@ -1,7 +1,6 @@
-from pymongo import MongoClient
 import logging
-from configparser import ConfigParser
 import argparse
+from pymongo import MongoClient
 
 
 logger = logging.getLogger()
@@ -11,16 +10,14 @@ logging.root.setLevel(level=logging.INFO)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('pconf', help='Path to config file')
+    parser.add_argument('host', help='MongoDB host')
+    parser.add_argument('port', help='MongoDB port')
     parser.add_argument('db_name', help='Database name')
     parser.add_argument('collection_name', help='Collection name')
     args = parser.parse_args()
 
-    config_path = args.pconf
-    config = ConfigParser()
-    config.read(config_path)
-    host = config.get('mongodb', 'host')
-    port = config.getint('mongodb', 'port')
+    host = args.host
+    port = int(args.port)
     db_name = args.db_name
     collection_name = args.collection_name
 

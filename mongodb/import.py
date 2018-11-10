@@ -1,13 +1,12 @@
 import sys
 import os
 import bz2
-import ujson as json
 from itertools import islice
-from pymongo import MongoClient
 import multiprocessing
 import logging
-from configparser import ConfigParser
 import argparse
+import ujson as json
+from pymongo import MongoClient
 
 
 logger = logging.getLogger()
@@ -46,9 +45,10 @@ def process(lines, verbose=False):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('pconf', help='Path to config file')
     parser.add_argument('inpath',
                         help='Path to inpath file (xxxxxxxx-all.json.bz2)')
+    parser.add_argument('host', help='MongoDB host')
+    parser.add_argument('port', help='MongoDB port')
     parser.add_argument('db_name', help='Database name')
     parser.add_argument('collection_name', help='Collection name')
     parser.add_argument('--chunk_size', '-c', default=10000,
@@ -58,12 +58,9 @@ if __name__ == '__main__':
                         help='Number of workers (default=1)')
     args = parser.parse_args()
 
-    config_path = args.pconf
-    config = ConfigParser()
-    config.read(config_path)
-    host = config.get('mongodb', 'host')
-    port = config.getint('mongodb', 'port')
     pdata = args.inpath
+    host = args.host
+    port = int(args.port)
     db_name = args.db_name
     collection_name = args.collection_name
     nworker = int(args.nworker)
