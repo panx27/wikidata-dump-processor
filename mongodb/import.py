@@ -27,6 +27,7 @@ def process(lines, verbose=False):
             if line == '[' or line == ']':
                 continue
             d = json.loads(line)
+            d['_id'] = d['id']
             data.append(d)
         if data:
             collection.insert(data) # batch insert is much faster than
