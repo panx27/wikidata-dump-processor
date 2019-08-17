@@ -24,6 +24,8 @@ def process(lines, verbose=False):
         data = []
         for line in lines:
             line = line.decode('utf-8').rstrip(',\n')
+            if not line:
+                continue
             if line == '[' or line == ']':
                 continue
             d = json.loads(line)
