@@ -1,5 +1,6 @@
 import logging
 import argparse
+
 from pymongo import MongoClient
 
 
@@ -58,7 +59,7 @@ if __name__ == '__main__':
     # { claims.P31.mainsnak.datavalue.value.id: 1 }
     logger.info('index key: { claims.P31.mainsnak.datavalue.value.id: 1 }')
     key = [('claims.P31.mainsnak.datavalue.value.id', 1)]
-    pfe = { 'claims.P31.mainsnak.datavalue.value.id': {'$exists': True}}
+    pfe = {'claims.P31.mainsnak.datavalue.value.id': {'$exists': True}}
     collection.create_index(key, partialFilterExpression=pfe)
 
     # { claims.P646.mainsnak.datavalue.value: 1 }

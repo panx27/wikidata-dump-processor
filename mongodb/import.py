@@ -1,10 +1,11 @@
 import sys
 import os
 import bz2
-from itertools import islice
-import multiprocessing
 import logging
 import argparse
+import multiprocessing
+from itertools import islice
+
 import ujson as json
 from pymongo import MongoClient
 
@@ -32,18 +33,15 @@ def process(lines, verbose=False):
             d['_id'] = d['id']
             data.append(d)
         if data:
-            collection.insert(data) # batch insert is much faster than
-                                    # insert_one, but it causes larger RAM usage
-                                    # reduce --chunk_size if necessary
+            # Batch insert is much faster than insert_one, but it requires
+            # larger RAM usage, reduce --chunk_size if you don't have enough
+            # RAM
+            collection.insert(data)
         client.close()
         if verbose:
             logger.info('%s finished' % pid)
-
     except Exception as e:
-        exc_type, exc_obj, exc_tb = sys.exc_info()
-        msg = 'unexpected error: %s | %s | %s' % \
-              (exc_type, exc_obj, exc_tb.tb_lineno)
-        logger.error(msg)
+        logger.exception(e)
 
 
 if __name__ == '__main__':
@@ -55,7 +53,7 @@ if __name__ == '__main__':
     parser.add_argument('db_name', help='Database name')
     parser.add_argument('collection_name', help='Collection name')
     parser.add_argument('--chunk_size', '-c', default=10000,
-                        help='Chunk size (default=10000, ' \
+                        help='Chunk size (default=10000, '
                         'RAM usage depends on chunk size)')
     parser.add_argument('--nworker', '-n', default=1,
                         help='Number of workers (default=1)')
