@@ -19,7 +19,7 @@ def process(lines, verbose=False):
     try:
         if verbose:
             pid = os.getpid()
-            logger.info('%s started' % pid)
+            logger.info(f'{pid} started')
         client = MongoClient(host=host, port=port)
         collection = client[db_name][collection_name]
         data = []
@@ -33,13 +33,13 @@ def process(lines, verbose=False):
             d['_id'] = d['id']
             data.append(d)
         if data:
-            # Batch insert is much faster than insert_one, but it requires
-            # larger RAM usage, reduce --chunk_size if you don't have enough
-            # RAM
-            collection.insert(data)
+            # insert_many is much faster than insert_one,
+            # but it requires larger RAM usage, reduce --chunk_size
+            # if you don't have enough RAM
+            collection.insert_many(data)
         client.close()
         if verbose:
-            logger.info('%s finished' % pid)
+            logger.info(f'{pid} finished')
     except Exception as e:
         logger.exception(e)
 
@@ -67,17 +67,17 @@ if __name__ == '__main__':
     nworker = int(args.nworker)
     chunk_size = int(args.chunk_size)
 
-    logger.info('db name: %s' % db_name)
-    logger.info('collection name: %s' % collection_name)
+    logger.info(f'db name: {db_name}')
+    logger.info(f'collection name: {collection_name}')
     client = MongoClient(host=host, port=port)
-    logger.info('drop collection')
+    logger.info('drop old collection')
     client[db_name].drop_collection(collection_name)
 
     logger.info('importing...')
     pool = multiprocessing.Pool(processes=nworker)
-    logger.info('# of workers: %s' % nworker)
-    logger.info('chunk size: %s' % chunk_size)
-    logger.info('parent pid: %s' % os.getpid())
+    logger.info(f'# of workers: {nworker}')
+    logger.info(f'chunk size: {chunk_size}')
+    logger.info(f'parent pid: {os.getpid()}')
     with bz2.BZ2File(pdata) as f:
         for chunk in iter(lambda: tuple(islice(f, chunk_size)), ()):
             pool.apply_async(process, args=(chunk,),)
