@@ -22,8 +22,8 @@ if __name__ == '__main__':
     db_name = args.db_name
     collection_name = args.collection_name
 
-    logger.info('db name: %s' % db_name)
-    logger.info('collection name: %s' % collection_name)
+    logger.info(f'db name: {db_name}')
+    logger.info(f'collection name: {collection_name}')
     logger.info('indexing...')
     client = MongoClient(host=host, port=port)
     collection = client[db_name][collection_name]
@@ -44,6 +44,12 @@ if __name__ == '__main__':
     pfe = {'sitelinks.enwiki.title': {'$exists': True}}
     collection.create_index(key, partialFilterExpression=pfe)
 
+    # { claims.P646.mainsnak.datavalue.value: 1 }
+    logger.info('index key: { claims.P646.mainsnak.datavalue.value: 1 }')
+    key = [('claims.P646.mainsnak.datavalue.value', 1)]
+    pfe = {'claims.P646.mainsnak.datavalue.value': {'$exists': True}}
+    collection.create_index(key, partialFilterExpression=pfe)
+
     # { labels.en.value: 1, id: 1 }
     logger.info('index key: { labels.en.value: 1, id: 1 }')
     key = [('labels.en.value', 1), ('id', 1)]
@@ -62,8 +68,8 @@ if __name__ == '__main__':
     pfe = {'claims.P31.mainsnak.datavalue.value.id': {'$exists': True}}
     collection.create_index(key, partialFilterExpression=pfe)
 
-    # { claims.P646.mainsnak.datavalue.value: 1 }
-    logger.info('index key: { claims.P646.mainsnak.datavalue.value: 1 }')
-    key = [('claims.P646.mainsnak.datavalue.value', 1)]
-    pfe = {'claims.P646.mainsnak.datavalue.value': {'$exists': True}}
+    # { claims: 1 }
+    logger.info('index key: { claims: 1 }')
+    key = [('claims', 1)]
+    pfe = {'claims': {'$exists': True}}
     collection.create_index(key, partialFilterExpression=pfe)
