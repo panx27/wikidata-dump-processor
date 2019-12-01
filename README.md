@@ -13,7 +13,7 @@ Import Wikidata [json dump](https://dumps.wikimedia.org/wikidatawiki/entities/) 
      
      [instance of](https://www.wikidata.org/wiki/Property:P31): `{ claims.P31.mainsnak.datavalue.value.id: 1 }`
 
-     all properties: `{ claims: 1 }`
+     all properties: `{ properties: 1 }`
 
 - [Partial Index](https://docs.mongodb.com/manual/core/index-partial/) for [Covered Query](https://docs.mongodb.com/manual/core/query-optimization/#covered-query):
      `{ sitelinks.enwiki.title: 1, id: 1 }`
