@@ -31,6 +31,7 @@ def process(lines, verbose=False):
                 continue
             d = json.loads(line)
             d['_id'] = d['id']
+            d['properties'] = list(d['claims'].keys())
             data.append(d)
         if data:
             # insert_many is much faster than insert_one,

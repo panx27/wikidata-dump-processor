@@ -68,8 +68,8 @@ if __name__ == '__main__':
     pfe = {'claims.P31.mainsnak.datavalue.value.id': {'$exists': True}}
     collection.create_index(key, partialFilterExpression=pfe)
 
-    # { claims: 1 }
-    logger.info('index key: { claims: 1 }')
-    key = [('claims', 1)]
-    pfe = {'claims': {'$exists': True}}
+    # { properties: 1 }
+    logger.info('index key: { properties: 1 }')
+    key = [('properties', 1)]
+    pfe = {'properties': {'$exists': True}}
     collection.create_index(key, partialFilterExpression=pfe)
