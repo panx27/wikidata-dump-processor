@@ -5,6 +5,8 @@ Import Wikidata [json dump](https://dumps.wikimedia.org/wikidatawiki/entities/) 
 
      [Wikidata ID](https://www.wikidata.org/wiki/Wikidata:Identifiers): `{ id: 1 }`
      
+     [English Alias](https://www.wikidata.org/wiki/Help:Aliases): `{ aliases.en.value: 1 }`
+     
      [English Wikipedia Title](https://www.wikidata.org/wiki/Help:Sitelinks): `{ sitelinks.enwiki.title: 1 }`
      
      [Freebase ID](https://www.wikidata.org/wiki/Property:P646): `{ claims.P646.mainsnak.datavalue.value: 1 }`
@@ -53,4 +55,4 @@ Step 2: index
       
 
 ## Miscellaneous
-- If you get `errno:24 Too many open files` error, try to increase system limits. For example, in Linux, you can run `ulimit -n 64000` in the console running mongod.
+- If you get `errno:24 Too many open files` error, try to increase system limits. For example, in Linux, you can run `ulimit -n 64000` in the **console running mongod**.
