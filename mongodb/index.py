@@ -32,6 +32,12 @@ if __name__ == '__main__':
     logger.info('index key: { id: 1 }')
     collection.create_index('id', unique=True)
 
+    # { aliases.en.value: 1 }
+    logger.info('index key: { aliases.en.value: 1 }')
+    key = [('aliases.en.value', 1)]
+    pfe = {'aliases.en.value': {'$exists': True}}
+    collection.create_index(key, partialFilterExpression=pfe)
+
     # { sitelinks.enwiki.title: 1 }
     logger.info('index key: { sitelinks.enwiki.title : 1 }')
     key = [('sitelinks.enwiki.title', 1)]
@@ -73,3 +79,4 @@ if __name__ == '__main__':
     key = [('properties', 1)]
     pfe = {'properties': {'$exists': True}}
     collection.create_index(key, partialFilterExpression=pfe)
+
