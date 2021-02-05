@@ -79,4 +79,3 @@ if __name__ == '__main__':
     key = [('properties', 1)]
     pfe = {'properties': {'$exists': True}}
     collection.create_index(key, partialFilterExpression=pfe)
-
